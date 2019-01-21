@@ -1,0 +1,61 @@
+#!/usr/bin/env perl
+
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+use ProcVM;
+
+print <<"EHEAD";
+template_file: [% template_file %]
+
+use_devel_peek: [%use_devel_peek %]
+
+size: [% size %]
+
+n_func: [% n_func %]
+
+n_call: [% n_call %]
+
+assign_undef: [% assign_undef %]
+
+call_undef: [% call_undef %]
+
+-----------------------
+EHEAD
+
+[% IF use_devel_peek %]
+use Devel::Peek;
+$Devel::Peek::pv_limit = 16;
+[% END %]
+
+sub sub_gen {
+	my $offset = shift;
+    print "gen $offset\n";
+    my $s = (chr(ord("a") + $offset)) x [% size %];
+
+	return { 
+		info => sub {
+[% IF use_devel_peek %]
+			Dump($s);
+[% END %]
+		},
+		clear => sub {
+			print "clear $offset\n";
+			undef( $s );
+		},
+	}
+}
+print "cycle 1\n";
+
+my @things;
+[% FOREACH suffix IN suf_list %]
+	ProcVM::print_proc_vm();
+	print "sub [% suffix %]\n";
+	my $i = [% suffix %];
+	push @things, sub_gen( $i );
+#	$things[$i-1]->{info}->();
+#	$things[$i-1]->{clear}->() if $i > 10;
+	@things = () if $i == 11;
+[% END %]
+
+
+

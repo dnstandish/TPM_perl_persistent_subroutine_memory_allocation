@@ -1,0 +1,67 @@
+#!/usr/bin/env perl
+
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+use ProcVM;
+
+print <<"EHEAD";
+template_file: [% template_file %]
+
+use_devel_peek: [%use_devel_peek %]
+
+size: [% size %]
+
+n_func: [% n_func %]
+
+n_call: [% n_call %]
+
+assign_undef: [% assign_undef %]
+
+call_undef: [% call_undef %]
+
+-----------------------
+EHEAD
+
+[% IF use_devel_peek %]
+use Devel::Peek;
+$Devel::Peek::pv_limit = 16;
+[% END %]
+
+sub constant {
+	return "a" x [% size %];
+}
+[% FOREACH suffix IN suf_list %]
+sub f[% suffix %] {
+	my $offset = shift;
+    print "sub [% suffix %]\n";
+[% IF use_devel_peek %]
+	Dump($s);
+[% END %]
+    my $s = constant();
+
+[% IF use_devel_peek %]
+	Dump($s);
+[% END %]
+[% IF assign_undef %]
+	$s = undef;
+[% END %]
+[% IF call_undef %]
+	undef($s);
+[% END %]
+[% IF use_devel_peek %]
+	Dump($s);
+[% END %]
+	return "";
+}
+[% END %]
+
+[% FOREACH i IN call_list %]
+print "cycle [% i %]\n";
+ProcVM::print_proc_vm();
+[% FOREACH suffix IN suf_list %]
+f[% suffix %]([% i %]);
+ProcVM::print_proc_vm();
+sleep(1);
+[% END %]
+[% END %]
+

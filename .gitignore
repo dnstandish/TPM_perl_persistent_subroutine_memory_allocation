@@ -1,0 +1,7 @@
+*~
+bin/*
+compare/*
+generated/*
+presentation/
+v5*/
+temp/
