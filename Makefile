@@ -13,10 +13,15 @@ all: setup simple_tests memuse_tests memlimit
 	@/bin/echo $(PERL_VER)
 	@/bin/echo "$(simple_err)"
 
-setup: $(PERL_VER)
+setup: $(PERL_VER) bin compare generated
+
 
 $(PERL_VER):
 	mkdir  $(PERL_VER)
+
+bin compare generated:
+	mkdir $@
+
 
 simple_tests:$(simple_err)
 	@echo $< $@
