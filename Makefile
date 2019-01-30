@@ -4,7 +4,8 @@ GEN=generated
 TEMPLATE=templates
 PERL_VER := $(shell perl -e 'print $$^V')
 
-simple=mem_test1.pl  mem_test2.pl  mem_test3.pl  mem_test4.pl  mem_test5.pl  mem_test6.pl  mem_test7.pl mem_test8.pl mem_test9.pl
+simple=mem_test1.pl  mem_test2.pl  mem_test3.pl  mem_test4.pl  mem_test5.pl  mem_test6.pl  mem_test7.pl mem_test8.pl mem_test9.pl mem_test12.pl mem_test13.pl
+
 simple_base := $(basename $(simple))
 simple_err := $(addprefix $(PERL_VER)/, $(addsuffix .err,  $(simple_base)))
 
@@ -74,7 +75,7 @@ $(GEN)/func6.pl:$(TEMPLATE)/many_func6.template  $(SCRIPTS)/gen_test_template.pl
 	$(SCRIPTS)/gen_test_template.pl -nf 20 -s 800000  -out $@  -r 1  -temp $(TEMPLATE)/many_func6.template  
 
 $(GEN)/func1var.pl:$(TEMPLATE)/many_func1var.template  $(SCRIPTS)/gen_test_template.pl
-	$(SCRIPTS)/gen_test_template.pl -nf 20 -s 800000 -r 3 -out $@ -temp $(TEMPLATE)/many_func1var.template 
+	$(SCRIPTS)/gen_test_template.pl -nf 20 -use_devel_peek -s 800000 -r 3 -out $@ -temp $(TEMPLATE)/many_func1var.template 
 
 $(GEN)/func1_return.pl:$(TEMPLATE)/many_func1_return.template  $(SCRIPTS)/gen_test_template.pl
 	$(SCRIPTS)/gen_test_template.pl -nf 20 -s 800000  -out $@  -r 1 -temp $(TEMPLATE)/many_func1_return.template 

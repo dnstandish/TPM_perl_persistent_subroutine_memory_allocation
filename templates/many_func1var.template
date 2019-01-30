@@ -21,7 +21,7 @@ call_undef: [% call_undef %]
 
 -----------------------
 EHEAD
-
+$| = 1;
 [% IF use_devel_peek %]
 use Devel::Peek;
 $Devel::Peek::pv_limit = 16;
